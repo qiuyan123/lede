@@ -1,59 +1,52 @@
+# SPDX-Identifier-License: GPL-3.0-only
 #
-# Copyright (C) 2015-2020 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v3.
-#
-#
+# Copyright (C) 2021 ImmortalWrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=UnblockNeteaseMusic
-PKG_VERSION:=0.25.3
-PKG_RELEASE:=5
-
-PKG_LICENSE:=MIT
+PKG_BASE_VERSION:=0.27.0-beta.9
+PKG_RELEASE:=$(AUTORELEASE)
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/nondanee/UnblockNeteaseMusic.git
-PKG_SOURCE_VERSION:=1193e29a2c8f72c738d2988d5cf5afbb2fee7463
+PKG_SOURCE_URL:=https://github.com/UnblockNeteaseMusic/server.git
+PKG_SOURCE_DATE:=2021-11-16
+PKG_SOURCE_VERSION:=53fa6920e03e34dff385571b6328a85fa99a0807
+PKG_MIRROR_HASH:=dde00621b2e55c05a8f0b01a8de6ce6664a74be2d8e0fd86ecf68f93fcf3509d
 
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)
-PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
-PKG_BUILD_PARALLEL:=1
+PKG_VERSION:=$(PKG_BASE_VERSION)-$(PKG_SOURCE_DATE)-$(call version_abbrev,$(PKG_SOURCE_VERSION))
+
+PKG_LICENSE:=LGPL-3.0-only
+PKG_LICENSE_FILE:=LICENSE
+PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/$(PKG_NAME)
-	SECTION:=net
-	CATEGORY:=Network
-	TITLE:=Revive Netease Cloud Music (NodeJS)
-	DEPENDS:=+node 
-	URL:=https://github.com/nondanee/UnblockNeteaseMusic/releases
-	SUBMENU:=NeteaseMusic
-	PKGARCH:=all
-endef
-
-define Package/$(PKG_NAME)/description
-Revive Netease Cloud Music (NodeJS)
+define Package/UnblockNeteaseMusic
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
+  TITLE:=Revive Netease Cloud Music (NodeJS)
+  URL:=https://github.com/nondanee/UnblockNeteaseMusic
+  DEPENDS:=+node
+  PKGARCH:=all
 endef
 
 define Build/Prepare
-	tar -xzvf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
-	mkdir -p $(PKG_BUILD_DIR)/$(PKG_NAME)
-	echo -e $(PKG_VERSION) > $(PKG_BUILD_DIR)/$(PKG_NAME)/core_ver
-	echo -e $(PKG_SOURCE_VERSION) > $(PKG_BUILD_DIR)/$(PKG_NAME)/local_ver
+	mkdir -p $(PKG_BUILD_DIR)
+	xzcat $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
 endef
 
 define Build/Configure
+	echo -e $(PKG_BASE_VERSION) > $(PKG_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/core_ver
+	echo -e $(PKG_SOURCE_VERSION) > $(PKG_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/local_ver
 endef
 
 define Build/Compile
 endef
 
-define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR)  $(1)/usr/share/$(PKG_NAME)
-	cp -pR $(PKG_BUILD_DIR)/$(PKG_NAME)/* $(1)/usr/share/$(PKG_NAME)
+define Package/UnblockNeteaseMusic/install
+	$(INSTALL_DIR) $(1)/usr/share/UnblockNeteaseMusic
+	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/* $(1)/usr/share/UnblockNeteaseMusic
 endef
 
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,UnblockNeteaseMusic))

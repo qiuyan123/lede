@@ -4,23 +4,23 @@
 # This is free software, licensed under the GNU General Public License v3.
 #
 
-# 
+#
 # to get the latest version & md5 checksum:
 # curl -L -s -k -H "Accept:text/plain" "http://router.uu.163.com/api/plugin?type=openwrt-$(UU_ARCH)"
-# 
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uugamebooster
-PKG_VERSION:=v2.7.2
-PKG_RELEASE:=5
+PKG_VERSION:=v2.18.2
+PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
 	SECTION:=net
 	CATEGORY:=Network
-	DEPENDS:=@(aarch64||arm||mips||mipsel||x86_64) +kmod-tun
+	DEPENDS:=@(aarch64||arm||mipsel||x86_64) +kmod-tun
 	TITLE:=NetEase UU Game Booster
 	URL:=https://uu.163.com
 endef
@@ -31,30 +31,25 @@ endef
 
 ifeq ($(ARCH),x86_64)
 	UU_ARCH:=x86_64
-	PKG_MD5SUM:=07bf06131528276e7d4b8e3992fa2e8d
+	PKG_MD5SUM:=a0cbc202f512034b3162244398a2ddc7
 endif
 
 ifeq ($(ARCH),mipsel)
 	UU_ARCH:=mipsel
-	PKG_MD5SUM:=3f11af92eb7abf2af2cce8102fea7499
-endif
-
-ifeq ($(ARCH),mips)
-	UU_ARCH:=mipsel
-	PKG_MD5SUM:=3f11af92eb7abf2af2cce8102fea7499
+	PKG_MD5SUM:=06abb6adbabd87a264fae6ce9ec1875c
 endif
 
 ifeq ($(ARCH),arm)
 	UU_ARCH:=arm
-	PKG_MD5SUM:=5fce2b60df66ea8a8db4ddd55da3c6b4
+	PKG_MD5SUM:=c5b71d076a0901ab9a81496c916480f2
 endif
 
 ifeq ($(ARCH),aarch64)
 	UU_ARCH:=aarch64
-	PKG_MD5SUM:=bc0e513cfce113c69b068e198e936100
+	PKG_MD5SUM:=36a66e4e33d7d1fa729c731e31d8219a
 endif
 
-PKG_SOURCE_URL:=http://uu.gdl.netease.com/openwrt-$(UU_ARCH)/$(PKG_VERSION)/uu.tar.gz?
+PKG_SOURCE_URL:=http://uu.gdl.netease.com/uuplugin/openwrt-$(UU_ARCH)/$(PKG_VERSION)/uu.tar.gz?
 PKG_SOURCE:=$(PKG_NAME)-$(UU_ARCH)-$(PKG_VERSION).tar.gz
 
 STRIP:=true
